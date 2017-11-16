@@ -1,0 +1,4 @@
+﻿  MainForm.cpp
+MainForm.cpp(7): warning C4829: Possibly incorrect parameters to function main. Consider 'int main(Platform::Array<Platform::String^>^ argv)'
+  .NETFramework,Version=v4.6.1.AssemblyAttributes.cpp
+  HumanCounter.vcxproj -> C:\Users\curre\source\repos\HumanCounter\Debug\HumanCounter.exe
