@@ -90,6 +90,7 @@ namespace HumanCounter {
 		Thread^ trd_update_iNum = gcnew Thread(gcnew ThreadStart(this, &NumberForm::update_iNum));
 		trd_update_iNum->Start();
 		label1->Text = System::Convert::ToString(iNum);
+
 	}
 
 			 void update_iNum() {

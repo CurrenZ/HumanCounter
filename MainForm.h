@@ -57,7 +57,7 @@ namespace HumanCounter {
 
 		//private: IplImage* my_image;
 		//private: const char* my_image_path;
-	private: NumberForm^ num_form = gcnew NumberForm;
+	//private: NumberForm^ num_form = gcnew NumberForm;
 
 #pragma region Windows Form Designer generated code
 			 /// <summary>
@@ -164,8 +164,9 @@ namespace HumanCounter {
 			 }
 #pragma endregion
 	private: System::Void bt_start_Click(System::Object^  sender, System::EventArgs^  e) {
-		open_image();
-		open_num_form();
+		if (open_image()) {
+			open_num_form();
+		}
 		Thread^ trd_update_iNum = gcnew Thread(gcnew ThreadStart(this, &MainForm::update_iNum));
 		trd_update_iNum->Start();
 	}
@@ -200,31 +201,37 @@ namespace HumanCounter {
 
 	private: System::Void textBox1_TextChanged(System::Object^  sender, System::EventArgs^  e) {
 		iImgPath = (char*)Marshal::StringToHGlobalAnsi(textBox1->Text).ToPointer();
+		button1->Enabled = true;
 	}
 
-			 void update_iNum() {
-				 this->Invoke(gcnew MethodInvoker(this, &MainForm::thread_update_iNum));
-			 }
+	void update_iNum() {
+		this->Invoke(gcnew MethodInvoker(this, &MainForm::thread_update_iNum));
+	}
 
-			 void thread_update_iNum() {
-				 num_human();
-			 }
-			 void open_image() {
-				 iImg = cvLoadImage(iImgPath);
-				 cvShowImage(iImgPath, iImg);
-			 }
-			 void close_image() {
-				 try {
-					 cvReleaseImage(&iImg);
-					 cvDestroyWindow(iImgPath);
-				 }
-				 catch (const std::exception& e) {
-				 }
-			 }
-			 void open_num_form() {
-				 num_form->Show();
-			 }
-			 void close_num_form() {}
+	void thread_update_iNum() {
+		num_human();
+	}
+	bool open_image() {
+		iImg = cvLoadImage(iImgPath);
+		cvShowImage(iImgPath, iImg);
+		return true;
+	}
+	void close_image() {
+		try {
+			cvReleaseImage(&iImg);
+			cvDestroyWindow(iImgPath);
+		}
+		catch (const std::exception& e) {
+		}
+	}
+	void open_num_form() {
+		NumberForm^ num_form = gcnew NumberForm;
+		num_form->Show();
+		button1->Enabled = false;
+	}
+	void close_num_form() {}
+
+
 	private: System::Void MainForm_Load(System::Object^  sender, System::EventArgs^  e) {
 	}
 	};

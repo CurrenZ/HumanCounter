@@ -1,5 +1,5 @@
 ﻿  MainForm.cpp
-c:\users\curre\source\repos\humancounter\humancounter\MainForm.h(221): warning C4101: 'e': unreferenced local variable
+c:\users\curre\source\repos\humancounter\humancounter\MainForm.h(224): warning C4101: 'e': unreferenced local variable
 MainForm.cpp(7): warning C4829: Possibly incorrect parameters to function main. Consider 'int main(Platform::Array<Platform::String^>^ argv)'
   NumberForm.cpp
   Generating Code...
