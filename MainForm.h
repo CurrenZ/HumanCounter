@@ -1,8 +1,7 @@
 #pragma once
-#include "humancounting.h"
 #include <string> 
 #include <vcclr.h>
-#include "NumberForm.h"
+#include "msclr\marshal_cppstd.h"
 
 namespace HumanCounter {
 
@@ -41,11 +40,7 @@ namespace HumanCounter {
 		}
 
 	private: System::Windows::Forms::Label^  label1;
-
 	private: System::Windows::Forms::Button^  button1;
-	private: System::Windows::Forms::Button^  button2;
-	private: System::Windows::Forms::Button^  button3;
-
 	private: System::Windows::Forms::OpenFileDialog^  openFileDialog1;
 	private: System::Windows::Forms::Button^  button4;
 	private: System::Windows::Forms::TextBox^  textBox1;
@@ -54,10 +49,6 @@ namespace HumanCounter {
 		/// Required designer variable.
 		/// </summary>
 		System::ComponentModel::Container ^components;
-
-		//private: IplImage* my_image;
-		//private: const char* my_image_path;
-	//private: NumberForm^ num_form = gcnew NumberForm;
 
 #pragma region Windows Form Designer generated code
 			 /// <summary>
@@ -69,8 +60,6 @@ namespace HumanCounter {
 				 System::ComponentModel::ComponentResourceManager^  resources = (gcnew System::ComponentModel::ComponentResourceManager(MainForm::typeid));
 				 this->label1 = (gcnew System::Windows::Forms::Label());
 				 this->button1 = (gcnew System::Windows::Forms::Button());
-				 this->button2 = (gcnew System::Windows::Forms::Button());
-				 this->button3 = (gcnew System::Windows::Forms::Button());
 				 this->openFileDialog1 = (gcnew System::Windows::Forms::OpenFileDialog());
 				 this->button4 = (gcnew System::Windows::Forms::Button());
 				 this->textBox1 = (gcnew System::Windows::Forms::TextBox());
@@ -88,35 +77,13 @@ namespace HumanCounter {
 				 // button1
 				 // 
 				 this->button1->Enabled = false;
-				 this->button1->Location = System::Drawing::Point(135, 79);
+				 this->button1->Location = System::Drawing::Point(297, 79);
 				 this->button1->Name = L"button1";
 				 this->button1->Size = System::Drawing::Size(75, 23);
 				 this->button1->TabIndex = 2;
 				 this->button1->Text = L"Start";
 				 this->button1->UseVisualStyleBackColor = true;
 				 this->button1->Click += gcnew System::EventHandler(this, &MainForm::bt_start_Click);
-				 // 
-				 // button2
-				 // 
-				 this->button2->Enabled = false;
-				 this->button2->Location = System::Drawing::Point(216, 79);
-				 this->button2->Name = L"button2";
-				 this->button2->Size = System::Drawing::Size(75, 23);
-				 this->button2->TabIndex = 3;
-				 this->button2->Text = L"Pause";
-				 this->button2->UseVisualStyleBackColor = true;
-				 this->button2->Click += gcnew System::EventHandler(this, &MainForm::bt_pause_Click);
-				 // 
-				 // button3
-				 // 
-				 this->button3->Enabled = false;
-				 this->button3->Location = System::Drawing::Point(297, 79);
-				 this->button3->Name = L"button3";
-				 this->button3->Size = System::Drawing::Size(75, 23);
-				 this->button3->TabIndex = 4;
-				 this->button3->Text = L"Stop";
-				 this->button3->UseVisualStyleBackColor = true;
-				 this->button3->Click += gcnew System::EventHandler(this, &MainForm::bt_stop_Click);
 				 // 
 				 // openFileDialog1
 				 // 
@@ -147,8 +114,6 @@ namespace HumanCounter {
 				 this->ClientSize = System::Drawing::Size(384, 126);
 				 this->Controls->Add(this->textBox1);
 				 this->Controls->Add(this->button4);
-				 this->Controls->Add(this->button3);
-				 this->Controls->Add(this->button2);
 				 this->Controls->Add(this->button1);
 				 this->Controls->Add(this->label1);
 				 this->FormBorderStyle = System::Windows::Forms::FormBorderStyle::FixedSingle;
@@ -164,20 +129,11 @@ namespace HumanCounter {
 			 }
 #pragma endregion
 	private: System::Void bt_start_Click(System::Object^  sender, System::EventArgs^  e) {
-		if (open_image()) {
-			open_num_form();
-		}
-		Thread^ trd_update_iNum = gcnew Thread(gcnew ThreadStart(this, &MainForm::update_iNum));
-		trd_update_iNum->Start();
+		open_num_form();
 	}
-	private: System::Void bt_pause_Click(System::Object^  sender, System::EventArgs^  e) {
-	}
-	private: System::Void bt_stop_Click(System::Object^  sender, System::EventArgs^  e) {
-		close_image();
 
-	}
 	private: System::Void bt_browse_Click(System::Object^  sender, System::EventArgs^  e) {
-		openFileDialog1->InitialDirectory = "C:\\";
+		openFileDialog1->InitialDirectory = "C:\\Users\\curre\\PycharmProjects\\PedDetect\\images";
 		openFileDialog1->Filter = "Image Files(*.BMP;*.JPG;*.GIF)|*.BMP;*.JPG;*.GIF|All files (*.*)|*.*";
 		openFileDialog1->FilterIndex = 0;
 		openFileDialog1->RestoreDirectory = true;
@@ -188,45 +144,26 @@ namespace HumanCounter {
 		if (textBox1->Text != "") {
 			// Enable Start button when there is a file to open
 			button1->Enabled = true;
-			button2->Enabled = true;
-			button3->Enabled = true;
 		}
 		else {
 			// Disable Start button when there is no file to open
 			button1->Enabled = false;
-			button2->Enabled = false;
-			button3->Enabled = false;
 		}
 	}
 
 	private: System::Void textBox1_TextChanged(System::Object^  sender, System::EventArgs^  e) {
+		std::string iImgPath;
 		iImgPath = (char*)Marshal::StringToHGlobalAnsi(textBox1->Text).ToPointer();
 		button1->Enabled = true;
 	}
-
-	void update_iNum() {
-		this->Invoke(gcnew MethodInvoker(this, &MainForm::thread_update_iNum));
-	}
-
-	void thread_update_iNum() {
-		num_human();
-	}
-	bool open_image() {
-		iImg = cvLoadImage(iImgPath);
-		cvShowImage(iImgPath, iImg);
-		return true;
-	}
-	void close_image() {
-		try {
-			cvReleaseImage(&iImg);
-			cvDestroyWindow(iImgPath);
-		}
-		catch (const std::exception& e) {
-		}
-	}
 	void open_num_form() {
-		NumberForm^ num_form = gcnew NumberForm;
-		num_form->Show();
+		//std::string cmdline = "\"\"C:\\Program Files\\Python36\\python.exe\" \"C:\\Users\\curre\\PycharmProjects\\PedDetect\\PedDetect_SimgleImage.py\" \"-i\" ";
+		std::string cmdline = "\"\"C:\\Program Files\\Python36\\python.exe\" \"C:\\Users\\curre\\PycharmProjects\\PedDetect\\HumanCounter.py\" ";
+		msclr::interop::marshal_context context;
+		std::string boxtextstring = context.marshal_as<std::string>(textBox1->Text);
+		std::string path = "\"" + boxtextstring + "\"\"";
+		cmdline += path;
+		system(cmdline.c_str());
 		button1->Enabled = false;
 	}
 	void close_num_form() {}

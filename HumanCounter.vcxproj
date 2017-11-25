@@ -108,7 +108,7 @@
     <Link>
       <AdditionalDependencies>opencv_world330d.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <EntryPointSymbol>main</EntryPointSymbol>
-      <SubSystem>Windows</SubSystem>
+      <SubSystem>Console</SubSystem>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -138,25 +138,16 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="humancounting.cpp" />
     <ClCompile Include="MainForm.cpp" />
-    <ClCompile Include="NumberForm.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="humancounting.h" />
     <ClInclude Include="MainForm.h">
-      <FileType>CppForm</FileType>
-    </ClInclude>
-    <ClInclude Include="NumberForm.h">
       <FileType>CppForm</FileType>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="MainForm.resx">
       <DependentUpon>MainForm.h</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="NumberForm.resx">
-      <DependentUpon>NumberForm.h</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
