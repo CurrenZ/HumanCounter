@@ -157,10 +157,10 @@ namespace HumanCounter {
 		button1->Enabled = true;
 	}
 	void open_num_form() {
-		//std::string cmdline = "\"\"C:\\Program Files\\Python36\\python.exe\" \"C:\\Users\\curre\\PycharmProjects\\PedDetect\\PedDetect_SimgleImage.py\" \"-i\" ";
-		std::string cmdline = "\"\"C:\\Program Files\\Python36\\python.exe\" \"C:\\Users\\curre\\PycharmProjects\\PedDetect\\HumanCounter.py\" ";
 		msclr::interop::marshal_context context;
 		std::string boxtextstring = context.marshal_as<std::string>(textBox1->Text);
+		std::string temp_boxstring = boxtextstring;
+		std::string cmdline = "\"\"C:\\Program Files\\Python36\\python.exe\" \"C:\\Users\\curre\\PycharmProjects\\PedDetect\\HumanCounter.py\" ";
 		std::string path = "\"" + boxtextstring + "\"\"";
 		cmdline += path;
 		system(cmdline.c_str());
